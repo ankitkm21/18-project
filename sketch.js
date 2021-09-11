@@ -33,8 +33,10 @@ function setup() {
   boy = createSprite(width / 2, 580, height - 20, 20);
   boy.addAnimation("SahilRunning", boyImg);
   boy.scale = 0.08;
-gameOverSprite=createSprite(width / 2, 580, height - 20, 20);
-
+  boy.debug = true
+  gameOverSprite = createSprite(width / 2, height / 2, height - 20, 20);
+  gameOverSprite.visible = false
+  gameOverSprite.addAnimation("gameover", endImg);
   cashG = new Group();
   diamondsG = new Group();
   jwelleryG = new Group();
@@ -45,7 +47,7 @@ gameOverSprite=createSprite(width / 2, 580, height - 20, 20);
 function draw() {
 
   if (gameState === PLAY) {
-    background(0);
+    // background(0);
     boy.x = World.mouseX;
     touches = [];
 
@@ -75,49 +77,47 @@ function draw() {
       treasureCollection = treasureCollection + 150;
 
     }
-  
-    
-      if (swordGroup.isTouching(boy)) {
-        gameState = END;
-        boy.addAnimation("SahilRunning", endImg);
-        boy.x = 650;
-        boy.y = 300;
-        boy.scale = 2;
-        cashG.destroyEach();
-        diamondsG.destroyEach();
-        jwelleryG.destroyEach();
-        swordGroup.destroyEach();
-        cashG.setVelocityYEach(0);
-        diamondsG.setVelocityYEach(0);
-        jwelleryG.setVelocityYEach(0);
-        swordGroup.setVelocityYEach(0);
 
 
-        textSize(20)
-        fill(300)
-        text("PRESS SPACE BUTTON TO PLAY BACK", 500, 500)
-      }
-      }
-        if (keyDown("SPACE")) {
-          reset();
-          console.log("reset")
-        }
-      
+    if (swordGroup.isTouching(boy)) {
+      gameState = END;
+      gameOverSprite.visible=true
+     boy.visible=false
+      cashG.destroyEach();
+      diamondsG.destroyEach();
+      jwelleryG.destroyEach();
+      swordGroup.destroyEach();
+      cashG.setVelocityYEach(0);
+      diamondsG.setVelocityYEach(0);
+      jwelleryG.setVelocityYEach(0);
+      swordGroup.setVelocityYEach(0);
 
 
-    
-
-
-    drawSprites();
-    textSize(20);
-    fill(255);
-    text("Treasure: " + treasureCollection, 150, 30);
+      textSize(20)
+      fill(300)
+      text("PRESS SPACE BUTTON TO PLAY BACK", 500, 500)
+    }
+  }
+  if (keyDown("SPACE")) {
+    reset();
+    console.log("reset")
+  }
 
 
 
 
 
-  
+
+  drawSprites();
+  textSize(20);
+  fill(255);
+  text("Treasure: " + treasureCollection, 150, 30);
+
+
+
+
+
+
 
 }
 function createCash() {
@@ -154,7 +154,7 @@ function createJwellery() {
 }
 
 function createSword() {
-  if (World.frameCount % 530 == 0) {
+  if (World.frameCount % 100 == 0) {
     var sword = createSprite(Math.round(random(50, width - 50), 40, 10, 10));
     sword.addImage(swordImg);
     sword.scale = 0.1;
@@ -167,11 +167,13 @@ function createSword() {
 
 function reset() {
   gameState = PLAY;
+  gameOverSprite.visible=false
+  boy.visible=true
   // swordGroup.destroyEach();
   // cashG.destroyEach();
   // diamondsG.destroyEach();
   // jwelleryG.destroyEach();
-  
+
   treasureCollection = 0;
 
 }
